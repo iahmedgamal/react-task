@@ -36,12 +36,12 @@ function App() {
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar onUserSelect={handleUserSelect} />
-        <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-100">
+        <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-100 mt-16">
           <Toaster />
           {selectedUser ? (
             <UserProfile user={selectedUser} onUpdateUser={handleUserUpdate} />
           ) : (
-            <p className="text-teal-600">Select a user to view their profile.</p>
+            <p className="text-teal-600 text-center mt-8">Select a user to view their profile.</p>
           )}
         </main>
       </div>

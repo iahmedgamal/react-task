@@ -73,7 +73,7 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
     <>
    <button
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 md:hidden p-2 bg-teal-600 text-white rounded-full shadow-md z-10 flex items-center justify-center w-10 h-10"
+        className="fixed top-11 left-4 md:hidden p-2 bg-teal-600 text-white rounded-full shadow-md z-10 flex items-center justify-center w-10 h-10"
       >
         {isSidebarOpen ? <HiX className="w-6 h-6" /> : <HiMenu className="w-6 h-6" />}
       </button>
