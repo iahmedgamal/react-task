@@ -2,41 +2,33 @@ import { useEffect, useState } from "react";
 import { User } from "../interfaces/user.interface";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import {  selectUser } from "../redux/user/userSlice";
+import { selectUsers, selectSelectedUser, selectLoading, selectError } from "../redux/user/userSelectors";
+import { fetchUsers } from "../redux/user/userThunks";
 
 interface SidebarProps {
   onUserSelect: (user: User) => void;
 }
 
 const SideBar = ({ onUserSelect }: SidebarProps) => {
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const users = useSelector(selectUsers);
+  const selectedUser = useSelector(selectSelectedUser);
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("/mockedData/users.json");
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
-        }
-        const data = await response.json();
-        setUsers(data);
-        setLoading(false);
-      } catch (err: any) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const handleUserClick = (user: User) => {
-    setSelectedUserId(user.id);
+    dispatch(selectUser(user));
     onUserSelect(user);
     navigate("/");
   };
@@ -97,7 +89,7 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
             <li
               key={user.id}
               className={`p-2 cursor-pointer ${
-                selectedUserId === user.id ? "bg-teal-600 text-white" : ""
+                selectedUser?.id === user.id ? "bg-teal-600 text-white" : ""
               } hover:bg-teal-100 transition-colors`}
               onClick={() => handleUserClick(user)}
             >
