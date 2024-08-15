@@ -1,23 +1,34 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 import { User } from "../interfaces/user.interface";
 import { Activity } from "../interfaces/activity.interface";
 import ActivityList from "./Activity";
 import MostFrequentActivity from "./MostFrequentActivity";
 import { updateUser } from "../redux/user/userSlice";
-import { notifyError, notifySuccess } from "../utils/notificationUtil";
+import { notifySuccess } from "../utils/notificationUtil";
 import { RootState } from "../redux/store";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
 
-  const selectedUser = useSelector((state: RootState) => state.user.selectedUser);
-  const [formData, setFormData] = useState<User | null>(selectedUser);
-  const [errors, setErrors] = useState<Partial<Record<keyof User, string>>>({});
+  const selectedUser = useSelector(
+    (state: RootState) => state.user.selectedUser
+  );
   const [activities, setActivities] = useState<Activity[]>([]);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<User>({
+    defaultValues: selectedUser || {},
+  });
 
   useEffect(() => {
     if (selectedUser) {
+      reset(selectedUser);
+
       const fetchActivities = async () => {
         try {
           const response = await fetch(`/activities/${selectedUser.id}.json`);
@@ -36,73 +47,40 @@ const UserProfile = () => {
     }
   }, [selectedUser]);
 
-  useEffect(() => {
-    setFormData(selectedUser);
-  }, [selectedUser]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData!,
-      [name]: value,
-    }));
-  };
-
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const newErrors: Partial<Record<keyof User, string>> = {};
-
-    if (!formData?.name) {
-      newErrors.name = "Name is required";
-    }
-
-    if (!formData?.email || !validateEmail(formData?.email)) {
-      newErrors.email = "Invalid email address";
-    }
-
-    if (!formData?.phone) {
-      newErrors.phone = "Phone number is required";
-    }
-
-    if (!formData?.address) {
-      newErrors.address = "Address is required";
-    }
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length === 0 && formData) {
-      dispatch(updateUser(formData));
-      notifySuccess("User data updated successfully");
-    } else {
-      notifyError(newErrors.name || "Validation error");
-    }
+  const onSubmit = (data: User) => {
+    dispatch(updateUser(data));
+    notifySuccess("User data updated successfully");
   };
 
   if (!selectedUser) {
-    return <p className="text-teal-600 text-center mt-8">Select a user to view their profile.</p>;
+    return (
+      <p className="text-teal-600 text-center mt-8">
+        Select a user to view their profile.
+      </p>
+    );
   }
 
   return (
     <div>
-      <form className="p-6 bg-white  dark:bg-black shadow rounded text-teal-600" onSubmit={handleSubmit}>
+      <form
+        className="p-6 bg-white  dark:bg-black shadow rounded text-teal-600"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h2 className="text-2xl font-bold mb-4">Edit User Profile</h2>
         <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="name">Name</label>
+          <label className="block text-sm font-bold mb-2" htmlFor="name">
+            Name
+          </label>
           <input
             id="name"
-            name="name"
-            type="text"
-            value={formData?.name }
-            onChange={handleChange}
+            {...register("name", { required: "Name is required" })}
             className="p-2 border border-teal-300 rounded w-full"
           />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          {errors.name?.message && (
+            <p className="text-red-500 text-sm">
+              {String(errors.name.message)}
+            </p>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2" htmlFor="email">
@@ -110,14 +88,17 @@ const UserProfile = () => {
           </label>
           <input
             id="email"
-            name="email"
-            type="email"
-            value={formData?.email}
-            onChange={handleChange}
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Invalid email address",
+              },
+            })}
             className="p-2 border border-teal-300 rounded w-full"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email}</p>
+            <p className="text-red-500 text-sm">{`${errors.email.message}`}</p>
           )}
         </div>
         <div className="mb-4">
@@ -126,14 +107,11 @@ const UserProfile = () => {
           </label>
           <input
             id="phone"
-            name="phone"
-            type="text"
-            value={formData?.phone}
-            onChange={handleChange}
+            {...register("phone", { required: "Phone number is required" })}
             className="p-2 border border-teal-300 rounded w-full"
           />
           {errors.phone && (
-            <p className="text-red-500 text-sm">{errors.phone}</p>
+            <p className="text-red-500 text-sm">{`${errors.phone}`}</p>
           )}
         </div>
         <div className="mb-4">
@@ -142,14 +120,11 @@ const UserProfile = () => {
           </label>
           <input
             id="address"
-            name="address"
-            type="text"
-            value={formData?.address}
-            onChange={handleChange}
+            {...register("address", { required: "Address is required" })}
             className="p-2 border border-teal-300 rounded w-full"
           />
           {errors.address && (
-            <p className="text-red-500 text-sm">{errors.address}</p>
+            <p className="text-red-500 text-sm">{`${errors.address}`}</p>
           )}
         </div>
         <button
