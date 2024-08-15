@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
     <header className="bg-slate-100 text-teal-600 p-4 md:p-6 fixed top-0 inset-x-0 z-10 shadow-sm">
@@ -10,14 +12,14 @@ function Header() {
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="/profile" className="hover:text-teal-300">
+              <Link to="/profile" className="hover:text-teal-300">
                 Profile
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/settings" className="hover:text-teal-300">
-                Settings
-              </a>
+              <Link to="/Settings" className="hover:text-teal-300">
+                settings
+              </Link>
             </li>
           </ul>
         </nav>
