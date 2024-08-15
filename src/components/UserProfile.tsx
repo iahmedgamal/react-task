@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { User } from "../interfaces/user.interface";
+import { Activity } from "../interfaces/activity.interface";
+import ActivityList from "./Activity";
+import MostFrequentActivity from "./MostFrequentActivity";
 
 interface UserProfileProps {
   user: User;
@@ -8,6 +11,25 @@ interface UserProfileProps {
 const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
   const [formData, setFormData] = useState<User>(user);
   const [errors, setErrors] = useState<Partial<Record<keyof User, string>>>({});
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await fetch(`/activities/${user.id}.json`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch activities");
+        }
+        const data = await response.json();
+        setActivities(data);
+      } catch (error) {
+        console.error(error);
+        setActivities([]);
+      }
+    };
+
+    fetchActivities();
+  }, [user.id]);
 
   useEffect(() => {
     setFormData(user);
@@ -55,76 +77,85 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
   };
 
   return (
-    <form
-      className="p-6 bg-white shadow rounded text-teal-600"
-      onSubmit={handleSubmit}
-    >
-      <h2 className="text-2xl font-bold mb-4">Edit User Profile</h2>
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2" htmlFor="name">
-          Name
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          value={formData.name}
-          onChange={handleChange}
-          className="p-2 border border-teal-300 rounded w-full"
-        />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2" htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="p-2 border border-teal-300 rounded w-full"
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2" htmlFor="phone">
-          Phone
-        </label>
-        <input
-          id="phone"
-          name="phone"
-          type="text"
-          value={formData.phone}
-          onChange={handleChange}
-          className="p-2 border border-teal-300 rounded w-full"
-        />
-        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2" htmlFor="address">
-          Address
-        </label>
-        <input
-          id="address"
-          name="address"
-          type="text"
-          value={formData.address}
-          onChange={handleChange}
-          className="p-2 border border-teal-300 rounded w-full"
-        />
-        {errors.address && (
-          <p className="text-red-500 text-sm">{errors.address}</p>
-        )}
-      </div>
-      <button
-        type="submit"
-        className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-500"
+    <div>
+      <form
+        className="p-6 bg-white shadow rounded text-teal-600"
+        onSubmit={handleSubmit}
       >
-        Save Changes
-      </button>
-    </form>
+        <h2 className="text-2xl font-bold mb-4">Edit User Profile</h2>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="name">
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            value={formData.name}
+            onChange={handleChange}
+            className="p-2 border border-teal-300 rounded w-full"
+          />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="email">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="p-2 border border-teal-300 rounded w-full"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="phone">
+            Phone
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="text"
+            value={formData.phone}
+            onChange={handleChange}
+            className="p-2 border border-teal-300 rounded w-full"
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm">{errors.phone}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2" htmlFor="address">
+            Address
+          </label>
+          <input
+            id="address"
+            name="address"
+            type="text"
+            value={formData.address}
+            onChange={handleChange}
+            className="p-2 border border-teal-300 rounded w-full"
+          />
+          {errors.address && (
+            <p className="text-red-500 text-sm">{errors.address}</p>
+          )}
+        </div>
+        <button
+          type="submit"
+          className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-500"
+        >
+          Save Changes
+        </button>
+      </form>
+
+      <ActivityList activities={activities}/>
+      <MostFrequentActivity activities={activities}/>
+    </div>
   );
 };
 

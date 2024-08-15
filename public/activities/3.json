@@ -1,0 +1,22 @@
+[
+    {
+      "id": 1,
+      "date": "2024-08-01T10:00:00Z",
+      "description": "Logged in"
+    },
+    {
+      "id": 2,
+      "date": "2024-08-01T10:30:00Z",
+      "description": "Logged in"
+    },
+    {
+      "id": 3,
+      "date": "2024-08-02T11:00:00Z",
+      "description": "Updated profile"
+    },
+    {
+      "id": 4,
+      "date": "2024-08-02T12:00:00Z",
+      "description": "Logged out"
+    }
+  ]
