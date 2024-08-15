@@ -38,7 +38,7 @@ const SideBar = () => {
   if (loading) {
     return (
       <aside
-        className={`bg-slate-100 w-full md:w-64 p-4 text-teal-500 fixed top-16 bottom-0 left-0 shadow-lg md:relative transition-transform duration-300 ${
+        className={`bg-slate-100  w-full md:w-64 p-4 text-teal-500 fixed top-16 bottom-0 left-0 shadow-lg md:relative transition-transform duration-300 ${
           isSidebarOpen
             ? "transform translate-x-0"
             : "transform -translate-x-full"
@@ -77,7 +77,7 @@ const SideBar = () => {
       </button>
 
       <aside
-        className={`bg-slate-100 md:w-64 p-6 text-teal-500 fixed top-16 bottom-0 left-0 shadow-lg md:relative transition-transform duration-300 ${
+        className={`bg-slate-100    dark:bg-black md:w-64 p-6 text-teal-500 fixed top-16 bottom-0 left-0 shadow-lg md:relative transition-transform duration-300 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >

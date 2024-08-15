@@ -90,7 +90,7 @@ const UserProfile = () => {
 
   return (
     <div>
-      <form className="p-6 bg-white shadow rounded text-teal-600" onSubmit={handleSubmit}>
+      <form className="p-6 bg-white  dark:bg-black shadow rounded text-teal-600" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4">Edit User Profile</h2>
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2" htmlFor="name">Name</label>

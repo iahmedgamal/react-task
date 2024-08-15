@@ -1,6 +1,6 @@
 const settings = () => {
   return (
-    <div>
+    <div className="text-teal-600">
       <h2 className="text-2xl font-bold">Settings Page</h2>
       <p>Customize the settings from here</p>
     </div>

@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import DarkModeToggle from "./DarkModeToggle";
 
 function Header() {
   return (
-    <header className="bg-slate-100 text-teal-600 p-4 md:p-6 fixed top-0 inset-x-0 z-10 shadow-sm">
+    <header className="bg-background  dark:bg-black text-teal-600 p-4 md:p-6 fixed top-0 inset-x-0 z-10 shadow-sm">
       <div className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold">
           <a href="/" className="hover:text-teal-300">
@@ -21,6 +22,11 @@ function Header() {
                 settings
               </Link>
             </li>
+            <li>
+            <DarkModeToggle/>
+
+            </li>
+        
           </ul>
         </nav>
       </div>

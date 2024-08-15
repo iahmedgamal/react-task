@@ -28,7 +28,7 @@ const MostFrequentActivity = ({ activities }: MostFrequentActivityProps) => {
   }, [activities]);
 
   return (
-    <div className="p-6 bg-white shadow rounded text-teal-600 mt-6">
+    <div className="p-6 bg-white  dark:bg-black shadow rounded text-teal-600 mt-6">
       <h2 className="text-2xl font-bold mb-4">Most Frequent Activity</h2>
       <p>{mostFrequentActivity}</p>
     </div>
