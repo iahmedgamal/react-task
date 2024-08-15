@@ -1,30 +1,39 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+
 import "./App.css";
-import Home from "./pages/home"
+import Header from "./components/Header"
+import Sidebar from "./components/Sidebar";
 
 function App() {
-  const [count, setCount] = useState(0);
+
+  // remove this for dry 
+  interface User {
+    id: number;
+    name: string;
+  }
+
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+  };
 
   return (
-    <>
-      <div className="flex flex-col min-h-screen">
-        <nav className="bg-gray-800 text-white p-4">
-          <div className="container mx-auto">Navbar Content</div>
-        </nav>
-
-        <div className="flex-grow bg-gray-100 p-4">
-          <div className="container mx-auto">
-            <Home/>
-          </div>
+    <div className="min-h-screen bg-gray-100-300 flex">
+    <Sidebar onUserSelect={handleUserSelect} />
+    <main className="flex-1 p-0">
+      <Header />
+      {selectedUser ? (
+        <div>
+          <h2 className="text-xl font-bold">User Profile</h2>
+          <p>Name: {selectedUser.name}</p>
+          {/* Additional user details will go here */}
         </div>
-
-        <footer className="bg-gray-800 text-white p-4">
-          <div className="container mx-auto">Footer Content</div>
-        </footer>
-      </div>
-    </>
+      ) : (
+        <p>Select a user to view their profile.</p>
+      )}
+    </main>
+  </div>
   );
 }
 
