@@ -5,11 +5,10 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { User } from "./interfaces/user.interface";
 import UserProfile from "./components/UserProfile";
-import toast, { Toaster } from "react-hot-toast";
 import Profile from "./pages/profile";
 import Settings from "./pages/settings";
 
-const notify = () => toast.success("User data updated successfully");
+
 
 function App() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -26,7 +25,6 @@ function App() {
       prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
     );
     setSelectedUser(updatedUser);
-    notify();
   };
 
   return (
@@ -35,8 +33,6 @@ function App() {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar onUserSelect={handleUserSelect} />
         <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-100 mt-16">
-          <Toaster />
-
           <Routes>
             <Route
               path="/"

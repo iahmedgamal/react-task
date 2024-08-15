@@ -3,6 +3,9 @@ import { User } from "../interfaces/user.interface";
 import { Activity } from "../interfaces/activity.interface";
 import ActivityList from "./Activity";
 import MostFrequentActivity from "./MostFrequentActivity";
+import { updateUser } from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
+import { notifyError, notifySuccess } from "../utils/notificationUtil";
 
 interface UserProfileProps {
   user: User;
@@ -12,6 +15,8 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
   const [formData, setFormData] = useState<User>(user);
   const [errors, setErrors] = useState<Partial<Record<keyof User, string>>>({});
   const [activities, setActivities] = useState<Activity[]>([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -72,7 +77,11 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
+      dispatch(updateUser(formData)); 
       onUpdateUser(formData);
+      notifySuccess("User data updated successfully");
+    } else {
+      notifyError(newErrors.name || "Validation error");
     }
   };
 

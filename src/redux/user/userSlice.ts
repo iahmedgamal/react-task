@@ -23,6 +23,14 @@ const userSlice = createSlice({
     selectUser: (state, action) => {
       state.selectedUser = action.payload;
     },
+    updateUser: (state, action) => {
+      const updatedUser = action.payload;
+      const userIndex = state.users.findIndex(user => user.id === updatedUser.id);
+      if (userIndex !== -1) {
+        state.users[userIndex] = updatedUser;
+        state.selectedUser = updatedUser;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -41,5 +49,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { selectUser } = userSlice.actions;
+export const { selectUser, updateUser  } = userSlice.actions;
 export default userSlice.reducer;
