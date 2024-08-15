@@ -27,7 +27,6 @@ const SideBar = () => {
 
   const handleUserClick = (user: User) => {
     dispatch(selectUser(user));
-    // onUserSelect(user);
     navigate("/");
   };
 

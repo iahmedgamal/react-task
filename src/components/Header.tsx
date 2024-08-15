@@ -3,7 +3,7 @@ import DarkModeToggle from "./DarkModeToggle";
 
 function Header() {
   return (
-    <header className="bg-background  dark:bg-black text-teal-600 p-4 md:p-6 fixed top-0 inset-x-0 z-10 shadow-sm">
+    <header className="bg-white  dark:bg-black text-teal-600 p-4 md:p-6 fixed top-0 inset-x-0 z-10 shadow-sm">
       <div className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold">
           <a href="/" className="hover:text-teal-300">
