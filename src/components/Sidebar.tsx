@@ -11,7 +11,9 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -36,24 +38,47 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
     onUserSelect(user);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  
   if (loading) {
     return (
-      <aside className="bg-slate-100 w-64 p-4 text-teal-500">
-        Loading users...
-      </aside>
+      <aside
+      className={`bg-slate-100 w-full md:w-64 p-4 text-teal-500 fixed top-16 bottom-0 left-0 shadow-lg md:relative transition-transform duration-300 ${
+        isSidebarOpen ? "transform translate-x-0" : "transform -translate-x-full"
+      }`}
+    >
+      Loading users...
+    </aside>
     );
   }
 
   if (error) {
     return (
-      <aside className="bg-slate-100 w-64 p-4 text-teal-500">
-        Error: {error}
-      </aside>
+      <aside
+      className={`bg-slate-100 w-full md:w-64 p-4 text-teal-500 fixed top-16 bottom-0 left-0 shadow-lg md:relative transition-transform duration-300 ${
+        isSidebarOpen ? "transform translate-x-0" : "transform -translate-x-full"
+      }`}
+    >
+      Error: {error}
+    </aside>
     );
   }
 
   return (
-    <aside className="bg-slate-50 w-64 p-4 text-cyan-500 shadow-sm">
+    <>
+     <button
+        onClick={toggleSidebar}
+        className="fixed top-4 left-4 md:hidden p-2 bg-teal-600 text-white rounded-md shadow-md z-50"
+      >
+        {isSidebarOpen ? "Close" : "Open"}
+      </button>
+
+      <aside     className={`bg-slate-100 w-full md:w-64 p-4 text-teal-500 fixed top-16 bottom-0 left-0 shadow-lg md:relative transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}>
       <h2 className="text-lg font-bold mb-4">Users</h2>
       <ul>
         {users.map((user) => (
@@ -61,7 +86,7 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
             key={user.id}
             className={`p-2 cursor-pointer ${
               selectedUserId === user.id ? "bg-teal-600 text-white" : ""
-            }`}
+            } hover:bg-teal-100 transition-colors`}
             onClick={() => handleUserClick(user)}
           >
             {user.name}
@@ -69,6 +94,8 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
         ))}
       </ul>
     </aside>
+    </>
+   
   );
 };
 
