@@ -1,9 +1,10 @@
-import React from 'react'
-
 const settings = () => {
   return (
-    <div>settings</div>
-  )
-}
+    <div>
+      <h2 className="text-2xl font-bold">Settings Page</h2>
+      <p>Customize the settings from here</p>
+    </div>
+  );
+};
 
-export default settings
+export default settings;

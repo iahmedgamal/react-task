@@ -1,15 +1,15 @@
 import { useState } from "react";
-
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Header from "./components/Header"
+import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { User } from "./interfaces/user.interface";
 import UserProfile from "./components/UserProfile";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
+import Profile from "./pages/profile";
+import Settings from "./pages/settings";
 
-const notify = () => toast.success('User data updated successfully');
-
- 
+const notify = () => toast.success("User data updated successfully");
 
 function App() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -20,15 +20,13 @@ function App() {
   };
 
   const handleUserUpdate = (updatedUser: User) => {
-    console.log({updatedUser})
+    console.log({ updatedUser });
 
     setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === updatedUser.id ? updatedUser : user
-      )
+      prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
     );
-    setSelectedUser(updatedUser); 
-    notify()
+    setSelectedUser(updatedUser);
+    notify();
   };
 
   return (
@@ -38,11 +36,26 @@ function App() {
         <Sidebar onUserSelect={handleUserSelect} />
         <main className="flex-1 p-4 md:p-6 overflow-auto bg-gray-100 mt-16">
           <Toaster />
-          {selectedUser ? (
-            <UserProfile user={selectedUser} onUpdateUser={handleUserUpdate} />
-          ) : (
-            <p className="text-teal-600 text-center mt-8">Select a user to view their profile.</p>
-          )}
+
+          <Routes>
+            <Route
+              path="/"
+              element={
+                selectedUser ? (
+                  <UserProfile
+                    user={selectedUser}
+                    onUpdateUser={handleUserUpdate}
+                  />
+                ) : (
+                  <p className="text-teal-600 text-center mt-8">
+                    Select a user to view their profile.
+                  </p>
+                )
+              }
+            />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
         </main>
       </div>
     </div>

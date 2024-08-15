@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "../interfaces/user.interface";
 import { HiMenu, HiX } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   onUserSelect: (user: User) => void;
@@ -12,6 +13,8 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -35,6 +38,7 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
   const handleUserClick = (user: User) => {
     setSelectedUserId(user.id);
     onUserSelect(user);
+    navigate("/");
   };
 
   const toggleSidebar = () => {
@@ -71,11 +75,15 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
 
   return (
     <>
-   <button
+      <button
         onClick={toggleSidebar}
         className="fixed top-11 left-4 md:hidden p-2 bg-teal-600 text-white rounded-full shadow-md z-10 flex items-center justify-center w-10 h-10"
       >
-        {isSidebarOpen ? <HiX className="w-6 h-6" /> : <HiMenu className="w-6 h-6" />}
+        {isSidebarOpen ? (
+          <HiX className="w-6 h-6" />
+        ) : (
+          <HiMenu className="w-6 h-6" />
+        )}
       </button>
 
       <aside
