@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
+import { User } from "../interfaces/user.interface";
 
-interface User {
-  id: number;
-  name: string;
-}
 
 interface SidebarProps {
   onUserSelect: (user: User) => void;

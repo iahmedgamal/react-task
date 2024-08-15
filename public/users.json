@@ -1,6 +1,37 @@
 [
-  { "id": 1, "name": "Mina" },
-  { "id": 2, "name": "Ahmadov" },
-  { "id": 3, "name": "Dimitar" },
-  { "id": 4, "name": "Mark" }
+  {
+    "id": 1,
+    "name": "Mina",
+    "email": "mina@thetest.com",
+    "phone": "+201092353565",
+    "address": "I'm from Egypt"
+  },
+  {
+    "id": 3,
+    "name": "Dimitar",
+    "email": "Dimitar@thetest.com",
+    "phone": "+359882346577",
+    "address": "I'm from Bulgaria"
+  },
+  {
+    "id": 4,
+    "name": "Mark",
+    "email": "mark@thetest.com",
+    "phone": "+20100352164",
+    "address": "I'm from Egypt"
+  },
+  {
+    "id": 5,
+    "name": "Juan",
+    "email": "Juan@thetest.com",
+    "phone": "+53565010923",
+    "address": "I'm from Cuba"
+  },
+  {
+    "id": 2,
+    "name": "Ahmadov",
+    "email": "ahmadov@thetest.com",
+    "phone": "+201092353565",
+    "address": "I'm from Egypt"
+  }
 ]

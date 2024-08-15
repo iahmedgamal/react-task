@@ -3,14 +3,11 @@ import { useState } from "react";
 import "./App.css";
 import Header from "./components/Header"
 import Sidebar from "./components/Sidebar";
+import { User } from "./interfaces/user.interface";
 
 function App() {
 
-  // remove this for dry 
-  interface User {
-    id: number;
-    name: string;
-  }
+
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -27,6 +24,9 @@ function App() {
         <div>
           <h2 className="text-xl font-bold">User Profile</h2>
           <p>Name: {selectedUser.name}</p>
+          <p>Email: {selectedUser.email}</p>
+          <p>Phone: {selectedUser.phone}</p>
+          <p>Address: {selectedUser.address}</p>
           {/* Additional user details will go here */}
         </div>
       ) : (
