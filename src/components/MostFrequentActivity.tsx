@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Activity } from '../interfaces/activity.interface';
 
 interface MostFrequentActivityProps {
@@ -5,34 +6,31 @@ interface MostFrequentActivityProps {
 }
 
 const MostFrequentActivity = ({ activities }: MostFrequentActivityProps) => {
+  const [mostFrequentActivity, setMostFrequentActivity] = useState<string | null>(null);
 
-  const getMostFrequentActivity = (activities: Activity[]): string => {
-    const activityCount = new Map<string, number>();
-
-    activities.forEach((activity) => {
-      const count = activityCount.get(activity.description) || 0;
-      activityCount.set(activity.description, count + 1);
-    });
-
-    let mostFrequentActivity = '';
-    let maxCount = 0;
-
-    for (const [description, count] of activityCount.entries()) {
-      if (count > maxCount) {
-        maxCount = count;
-        mostFrequentActivity = description;
-      }
+  useEffect(() => {
+    if (activities.length === 0) {
+      setMostFrequentActivity('No activities found.');
+      return;
     }
 
-    return mostFrequentActivity;
-  };
+    const worker = new Worker(new URL('/activityWorker.js', import.meta.url));
 
-  const mostFrequentActivity = getMostFrequentActivity(activities);
+    worker.onmessage = (event) => {
+      setMostFrequentActivity(event.data || 'No activities found.');
+    };
+
+    worker.postMessage({ activities });
+
+    return () => {
+      worker.terminate();
+    };
+  }, [activities]);
 
   return (
     <div className="p-6 bg-white shadow rounded text-teal-600 mt-6">
       <h2 className="text-2xl font-bold mb-4">Most Frequent Activity</h2>
-      <p>{mostFrequentActivity || 'No activities found.'}</p>
+      <p>{mostFrequentActivity}</p>
     </div>
   );
 };
