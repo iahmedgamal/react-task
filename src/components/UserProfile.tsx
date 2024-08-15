@@ -1,49 +1,49 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { User } from "../interfaces/user.interface";
 import { Activity } from "../interfaces/activity.interface";
 import ActivityList from "./Activity";
 import MostFrequentActivity from "./MostFrequentActivity";
 import { updateUser } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
 import { notifyError, notifySuccess } from "../utils/notificationUtil";
+import { RootState } from "../redux/store";
 
-interface UserProfileProps {
-  user: User;
-  onUpdateUser: (updatedUser: User) => void;
-}
-const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
-  const [formData, setFormData] = useState<User>(user);
+const UserProfile = () => {
+  const dispatch = useDispatch();
+
+  const selectedUser = useSelector((state: RootState) => state.user.selectedUser);
+  const [formData, setFormData] = useState<User | null>(selectedUser);
   const [errors, setErrors] = useState<Partial<Record<keyof User, string>>>({});
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const response = await fetch(`/activities/${user.id}.json`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch activities");
+    if (selectedUser) {
+      const fetchActivities = async () => {
+        try {
+          const response = await fetch(`/activities/${selectedUser.id}.json`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch activities");
+          }
+          const data = await response.json();
+          setActivities(data);
+        } catch (error) {
+          console.error(error);
+          setActivities([]);
         }
-        const data = await response.json();
-        setActivities(data);
-      } catch (error) {
-        console.error(error);
-        setActivities([]);
-      }
-    };
+      };
 
-    fetchActivities();
-  }, [user.id]);
+      fetchActivities();
+    }
+  }, [selectedUser]);
 
   useEffect(() => {
-    setFormData(user);
-  }, [user]);
+    setFormData(selectedUser);
+  }, [selectedUser]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
-      ...prevData,
+      ...prevData!,
       [name]: value,
     }));
   };
@@ -58,49 +58,47 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
 
     const newErrors: Partial<Record<keyof User, string>> = {};
 
-    if (!formData.name) {
+    if (!formData?.name) {
       newErrors.name = "Name is required";
     }
 
-    if (!formData.email || !validateEmail(formData.email)) {
+    if (!formData?.email || !validateEmail(formData?.email)) {
       newErrors.email = "Invalid email address";
     }
 
-    if (!formData.phone) {
+    if (!formData?.phone) {
       newErrors.phone = "Phone number is required";
     }
 
-    if (!formData.address) {
+    if (!formData?.address) {
       newErrors.address = "Address is required";
     }
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      dispatch(updateUser(formData)); 
-      onUpdateUser(formData);
+    if (Object.keys(newErrors).length === 0 && formData) {
+      dispatch(updateUser(formData));
       notifySuccess("User data updated successfully");
     } else {
       notifyError(newErrors.name || "Validation error");
     }
   };
 
+  if (!selectedUser) {
+    return <p className="text-teal-600 text-center mt-8">Select a user to view their profile.</p>;
+  }
+
   return (
     <div>
-      <form
-        className="p-6 bg-white shadow rounded text-teal-600"
-        onSubmit={handleSubmit}
-      >
+      <form className="p-6 bg-white shadow rounded text-teal-600" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4">Edit User Profile</h2>
         <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="name">
-            Name
-          </label>
+          <label className="block text-sm font-bold mb-2" htmlFor="name">Name</label>
           <input
             id="name"
             name="name"
             type="text"
-            value={formData.name}
+            value={formData?.name }
             onChange={handleChange}
             className="p-2 border border-teal-300 rounded w-full"
           />
@@ -114,7 +112,7 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
             id="email"
             name="email"
             type="email"
-            value={formData.email}
+            value={formData?.email}
             onChange={handleChange}
             className="p-2 border border-teal-300 rounded w-full"
           />
@@ -130,7 +128,7 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
             id="phone"
             name="phone"
             type="text"
-            value={formData.phone}
+            value={formData?.phone}
             onChange={handleChange}
             className="p-2 border border-teal-300 rounded w-full"
           />
@@ -146,7 +144,7 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
             id="address"
             name="address"
             type="text"
-            value={formData.address}
+            value={formData?.address}
             onChange={handleChange}
             className="p-2 border border-teal-300 rounded w-full"
           />
@@ -162,8 +160,8 @@ const UserProfile = ({ user, onUpdateUser }: UserProfileProps) => {
         </button>
       </form>
 
-      <ActivityList activities={activities}/>
-      <MostFrequentActivity activities={activities}/>
+      <ActivityList activities={activities} />
+      <MostFrequentActivity activities={activities} />
     </div>
   );
 };

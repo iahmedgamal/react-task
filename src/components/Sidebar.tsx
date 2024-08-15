@@ -8,11 +8,9 @@ import {  selectUser } from "../redux/user/userSlice";
 import { selectUsers, selectSelectedUser, selectLoading, selectError } from "../redux/user/userSelectors";
 import { fetchUsers } from "../redux/user/userThunks";
 
-interface SidebarProps {
-  onUserSelect: (user: User) => void;
-}
 
-const SideBar = ({ onUserSelect }: SidebarProps) => {
+
+const SideBar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector(selectUsers);
   const selectedUser = useSelector(selectSelectedUser);
@@ -29,7 +27,7 @@ const SideBar = ({ onUserSelect }: SidebarProps) => {
 
   const handleUserClick = (user: User) => {
     dispatch(selectUser(user));
-    onUserSelect(user);
+    // onUserSelect(user);
     navigate("/");
   };
 
