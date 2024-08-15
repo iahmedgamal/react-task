@@ -20,5 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "public/activityWorker.js"]
+  "include": ["src", "public/workers/activityWorker.js"]
 }

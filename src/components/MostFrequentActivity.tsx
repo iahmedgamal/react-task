@@ -14,7 +14,7 @@ const MostFrequentActivity = ({ activities }: MostFrequentActivityProps) => {
       return;
     }
 
-    const worker = new Worker(new URL('/activityWorker.js', import.meta.url));
+    const worker = new Worker(new URL('/workers/activityWorker.js', import.meta.url));
 
     worker.onmessage = (event) => {
       setMostFrequentActivity(event.data || 'No activities found.');
