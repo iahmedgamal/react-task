@@ -50,4 +50,10 @@ The algorthim implmented in this project designed to effecinetly determine the m
 - Iterate throw the the list of activites and update the value which is the count
 - Iterate over the map to get the maximum count number on all activites keys in the map
 - Performance: This approach is efficent with a time complexity `O(n)` where n is the number of activities in the list.  
-- One more performance technique applied: To use the `web worker` to not block the main thread from doing this heavy dataset apprach.
+- One more performance technique applied: To use the `web worker` to not block the main thread from doing this heavy dataset apprach. 
+
+### Screenshoots 
+![Screenshot 2024-08-15 150800](https://github.com/user-attachments/assets/47f477cc-5cbc-4411-a6b9-8213ff021297)
+![Screenshot 2024-08-15 150732](https://github.com/user-attachments/assets/20847283-7ada-4d03-b0ee-6ba50a472eb3)
+![Screenshot 2024-08-15 150647](https://github.com/user-attachments/assets/2e43d89c-5b16-4cb3-a663-8d436007457b)
+![Screenshot 2024-08-15 150556](https://github.com/user-attachments/assets/17e3d697-b3f6-49db-b20c-b539403bf207)
